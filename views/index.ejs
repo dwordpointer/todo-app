@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <div class="container">
+      <form class="form" method="POST">
+        <input placeholder="New todo" type="text" name="text">
+        <button type="submit">Add</button>
+      </form>
+      <ul class="list">
+        <% array.forEach(element => { %>
+          <li>
+            <form method="POST">
+              <input class="input" readonly name="name" value="<%= element.text %>" type="text">
+              <div class="buttons">
+                  <div>
+                      <input type="hidden" name="delete_id" value="<%= element.id %> ">
+                      <button name="delete" type="submit"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                  <div>
+                      <input type="hidden" name="edit_id" value="<%= element.id %> ">
+                      <span class="editBtn" type="submit"><i class="fa-solid fa-pen"></i></span>
+                      <button hidden class="ok" name="edit" type="submit"><i class="fa-solid fa-check"></i></button>
+                  </div>
+              </div>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+    <script>
+      const inputs = document.querySelectorAll(".input");
+      const editBtns = document.querySelectorAll(".editBtn");
+      const okBtns = document.querySelectorAll(".ok");
+
+      editBtns.forEach((btn, index) => {
+        btn.addEventListener("click", (e) => {
+            editBtns.forEach((b) => b.classList.remove("hidden"));
+            inputs.forEach((i) => {
+              i.setAttribute("readonly", null);
+              i.classList.remove("editable");
+            });
+            okBtns.forEach((b) => b.setAttribute("hidden", null));
+
+            btn.classList.add("hidden");
+            inputs[index].removeAttribute("readonly");
+            inputs[index].classList.add("editable");
+            okBtns[index].removeAttribute("hidden");
+
+            inputs[index].focus();
+        });
+      });
+    </script>
+  </body>
+</html>
